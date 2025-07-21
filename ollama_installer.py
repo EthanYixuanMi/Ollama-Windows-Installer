@@ -2,14 +2,11 @@ import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 import subprocess
 import os
-import sys
 import webbrowser
 import requests
 from bs4 import BeautifulSoup
 import threading
 import tkinter.scrolledtext as st
-import shutil
-import tempfile
 
 env_var_name = "OLLAMA_MODELS"
 model_library_url = "https://ollama.com/library"
@@ -20,7 +17,6 @@ LANGUAGES = {
         "welcome": "欢迎使用 Ollama 快速安装器，请选择语言：",
         "step": "当前步骤：第 {step} 步，共 3 步",
         "open_download": "打开 Ollama 官网下载安装包",
-        "legacy_download": "使用内置旧版本 Ollama 安装包",
         "confirm_downloaded": "我已在官网下载完成",
         "select_path": "请选择模型存储路径：",
         "browse": "浏览...",
@@ -32,15 +28,13 @@ LANGUAGES = {
         "cancel_download": "❌ 取消下载",
         "download_complete": "模型 {model} 已成功下载。",
         "back": "返回",
-        "language_toggle": "切换语言",
-        "error_legacy": "无法启动内置安装程序：{error}"
+        "language_toggle": "切换语言"
     },
     "en": {
         "title": "Ollama Quick Installer",
         "welcome": "Welcome to the Ollama Quick Installer. Please select a language:",
         "step": "Current Step: {step} of 3",
         "open_download": "Open Ollama website to download",
-        "legacy_download": "Use bundled legacy Ollama installer",
         "confirm_downloaded": "I have completed the download",
         "select_path": "Please select model storage path:",
         "browse": "Browse...",
@@ -52,8 +46,7 @@ LANGUAGES = {
         "cancel_download": "❌ Cancel Download",
         "download_complete": "Model {model} has been successfully downloaded.",
         "back": "Back",
-        "language_toggle": "Toggle Language",
-        "error_legacy": "Failed to launch legacy installer: {error}"
+        "language_toggle": "Toggle Language"
     }
 }
 
@@ -129,10 +122,7 @@ class OllamaInstallerApp:
 
         download_btn = tk.Button(frame, text=self.texts["open_download"], font=("Arial", 12), height=2, width=40,
                                  command=lambda: webbrowser.open("https://ollama.com/download/windows"))
-        download_btn.pack(pady=20)
-
-        legacy_btn = tk.Button(frame, text=self.texts["legacy_download"], width=30, command=self.run_legacy_installer)
-        legacy_btn.pack(pady=5)
+        download_btn.pack(pady=40)
 
         confirm_btn = tk.Button(frame, text=self.texts["confirm_downloaded"], width=30,
                                 command=lambda: self.show_frame("models"))
@@ -143,25 +133,172 @@ class OllamaInstallerApp:
 
         return frame
 
-    def run_legacy_installer(self):
+    def create_model_frame(self):
+        frame = tk.Frame(self.content_frame)
+
+        path_label = tk.Label(frame, text=self.texts["select_path"])
+        path_label.pack()
+
+        self.path_entry = tk.Entry(frame, width=50)
+        self.path_entry.pack()
+
+        browse_btn = tk.Button(frame, text=self.texts["browse"], command=self.select_folder)
+        browse_btn.pack()
+
+        env_btn = tk.Button(frame, text=self.texts["set_env"], command=self.set_env_var)
+        env_btn.pack(pady=10)
+
+        model_label = tk.Label(frame, text=self.texts["model_list"])
+        model_label.pack(pady=5)
+
+        self.model_listbox = tk.Listbox(frame, width=50, height=15)
+        self.model_listbox.pack()
+        self.model_listbox.bind('<<ListboxSelect>>', self.model_selected)
+
+        back_btn = tk.Button(frame, text=self.texts["back"], command=lambda: self.show_frame("download"))
+        back_btn.pack(pady=10)
+
+        self.load_models()
+
+        return frame
+
+    def set_language(self, lang):
+        self.language = lang
+        self.texts = LANGUAGES[self.language]
+        self.rebuild_ui()
+        self.show_frame("download")
+
+    def select_folder(self):
+        folder = filedialog.askdirectory()
+        if folder:
+            self.path_entry.delete(0, tk.END)
+            self.path_entry.insert(0, folder)
+
+    def set_env_var(self):
+        path = self.path_entry.get()
+        if not path:
+            messagebox.showwarning(self.texts["title"], self.texts["warning_no_path"])
+            return
+        os.system(f'setx {env_var_name} "{path}" /M')
+        messagebox.showinfo(self.texts["title"], f"{self.texts['success_env']} {path}")
+
+    def load_models(self):
+        self.models = self.fetch_online_models()
+        self.model_listbox.delete(0, tk.END)
+        for model in self.models:
+            self.model_listbox.insert(tk.END, model)
+
+    def fetch_online_models(self):
         try:
-            # 检查是否已安装 Ollama
-            if shutil.which("ollama"):
-                proceed = messagebox.askyesno(
-                    self.texts["title"],
-                    "检测到您的系统已安装 Ollama。\n仍然要继续运行旧版本安装包吗？" if self.language == "zh"
-                    else "Ollama is already installed on your system.\nDo you still want to run the legacy installer?"
-                )
-                if not proceed:
-                    return
-
-            # 将 OllamaSetup.exe 解压到临时目录并执行
-            temp_dir = tempfile.gettempdir()
-            installer_path = os.path.join(temp_dir, "OllamaSetup.exe")
-            with open(installer_path, "wb") as f_out:
-                with open(os.path.join(getattr(sys, '_MEIPASS', '.'), "OllamaSetup.exe"), "rb") as f_in:
-                    shutil.copyfileobj(f_in, f_out)
-            subprocess.Popen(installer_path, shell=True)
+            response = requests.get(model_library_url, timeout=10)
+            response.raise_for_status()
+            soup = BeautifulSoup(response.text, "html.parser")
+            model_list = []
+            for a in soup.find_all("a", href=True):
+                if a["href"].startswith("/library/"):
+                    model = a["href"].split("/library/")[1]
+                    if model and model not in model_list:
+                        model_list.append(model)
+            return model_list
         except Exception as e:
-            messagebox.showerror(self.texts["title"], self.texts["error_legacy"].format(error=e))
+            print(f"⚠️ 模型列表获取失败，使用默认列表: {e}")
+            return ["llama3", "phi3", "mistral", "deepseek-coder", "codellama"]
 
+    def model_selected(self, event):
+        if not self.path_entry.get():
+            messagebox.showwarning(self.texts["title"], self.texts["warning_no_path"])
+            return
+        selected = self.model_listbox.get(self.model_listbox.curselection())
+        if messagebox.askyesno(self.texts["title"], f"{self.texts['confirm_pull']} {selected}?"):
+            self.pull_model(selected)
+
+    def pull_model(self, model_name):
+        def run_pull():
+            try:
+                process = subprocess.Popen(
+                    ["ollama", "pull", model_name],
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.STDOUT,
+                    text=True,
+                    bufsize=1
+                )
+                self.show_download_window(process, model_name)
+            except Exception as e:
+                messagebox.showerror("错误", f"下载失败：{e}")
+
+        threading.Thread(target=run_pull, daemon=True).start()
+
+    def show_download_window(self, process, model_name):
+        win = tk.Toplevel(self.root)
+        win.title(f"正在下载：{model_name}")
+        win.geometry("600x400")
+
+        style = ttk.Style(win)
+        style.theme_use('default')
+        style.configure("green.Horizontal.TProgressbar", troughcolor='white', bordercolor='black',
+                        background='green', lightcolor='green', darkcolor='green')
+
+        progress = ttk.Progressbar(win, orient='horizontal', length=500, mode='determinate',
+                                   style="green.Horizontal.TProgressbar", maximum=100)
+        progress.pack(pady=5)
+
+        log_area = st.ScrolledText(win, wrap=tk.WORD)
+        log_area.pack(expand=True, fill=tk.BOTH)
+
+        cancel_btn = tk.Button(win, text=self.texts["cancel_download"], fg="red",
+                               command=lambda: cancel_download())
+        cancel_btn.pack(pady=5)
+
+        steps = ["pulling manifest", "pulling layers", "extracting", "verifying", "success"]
+        completed_steps = set()
+        cancelled = False
+
+        def cancel_download():
+            nonlocal cancelled
+            cancelled = True
+            try:
+                process.terminate()
+            except Exception:
+                pass
+            progress.stop()
+            log_area.insert(tk.END, "\n❌ 下载已取消。\n")
+            log_area.see(tk.END)
+            cancel_btn.config(state=tk.DISABLED)
+            win.title("下载已取消")
+
+        def read_output():
+            nonlocal cancelled
+            for line in process.stdout:
+                if cancelled:
+                    break
+                log_area.insert(tk.END, line)
+                log_area.see(tk.END)
+
+                for i, step in enumerate(steps):
+                    if step in line and step not in completed_steps:
+                        completed_steps.add(step)
+                        percent = int((len(completed_steps)) / len(steps) * 100)
+                        progress["value"] = percent
+                        break
+
+            process.wait()
+            if not cancelled:
+                if process.returncode == 0:
+                    progress["value"] = 100
+                    log_area.insert(tk.END, f"\n✅ 模型 {model_name} 下载完成。\n")
+                    log_area.see(tk.END)
+                    messagebox.showinfo("下载完成", self.texts["download_complete"].format(model=model_name))
+                    win.title("下载完成")
+                else:
+                    log_area.insert(tk.END, f"\n❌ 下载失败，错误码：{process.returncode}\n")
+                    log_area.see(tk.END)
+                    win.title("下载失败")
+            cancel_btn.config(state=tk.DISABLED)
+
+        threading.Thread(target=read_output, daemon=True).start()
+
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = OllamaInstallerApp(root)
+    root.mainloop()
