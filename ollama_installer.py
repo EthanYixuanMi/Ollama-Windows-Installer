@@ -1,3 +1,5 @@
+import sys
+import subprocess
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 import subprocess
@@ -215,12 +217,19 @@ class OllamaInstallerApp:
     def pull_model(self, model_name):
         def run_pull():
             try:
+                startupinfo = None
+                if sys.platform == "win32":
+                    startupinfo = subprocess.STARTUPINFO()
+                    startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+
                 process = subprocess.Popen(
                     ["ollama", "pull", model_name],
                     stdout=subprocess.PIPE,
                     stderr=subprocess.STDOUT,
                     text=True,
-                    bufsize=1
+                    encoding="utf-8",  # 👈 关键修改
+                    errors="replace",  # 👈 防止乱码崩溃
+                    startupinfo=startupinfo
                 )
                 self.show_download_window(process, model_name)
             except Exception as e:
