@@ -1,49 +1,62 @@
 # Ollama Quick Installer for Windows
 
-A user-friendly graphical installer for [Ollama](https://ollama.com) on Windows, featuring:
+A user-friendly graphical installer for [Ollama](https://ollama.com) on Windows.
 
-- 📦 One-click model selection and downloading
-- 🌐 Language toggle: English / 中文
-- ⚙️ Automatic environment variable configuration (`OLLAMA_MODELS`)
-- 🧾 Legacy installer support for offline use
-- 🧑‍💻 Open-source and community-friendly
+---
 
-## 🚀 Why This Project?
+## ✨ Features
 
-While Ollama provides powerful local LLM capabilities, installing it on Windows still involves:
+- 🪟 Intuitive 3-step GUI
+  1. Welcome (language selection)
+  2. Ollama official installer download
+  3. Model selection and download
+- 🌐 Supports English / 简体中文 language toggle
+- 📦 Real-time model list fetching from [ollama.com/library](https://ollama.com/library)
+- 🔽 One-click model download using `ollama pull <model>`
+- 📊 Download progress bar and step tracking (pull → extract → verify)
+- ❌ Cancel model download at any time
+- ⚙️ Auto setup of the `OLLAMA_MODELS` environment variable
 
-- Manually downloading the installer
+---
+
+## 🎯 Motivation
+
+Installing Ollama on Windows typically requires:
+- Visiting the website to download the installer
 - Manually configuring environment variables
-- Running `ollama pull` via command line for each model
+- Using the terminal to pull models
 
-This tool simplifies the entire process through a clean GUI, helping beginners and researchers get started faster.
+This tool streamlines the whole process via a GUI and lets you:
+- Choose language and model storage path
+- Pull models with one click
+- Monitor download status interactively
 
-## 🖼️ Features
+---
 
-- Multi-step wizard interface (Welcome → Install Ollama → Select and Pull Models)
-- Model list auto-fetched from [Ollama Library](https://ollama.com/library)
-- Model download with progress and cancel options
-- Environment variable (`OLLAMA_MODELS`) set automatically
-- Optionally run bundled `OllamaSetup.exe` for offline/legacy use
-- Fully localized in English and Simplified Chinese
+## 📦 Installation
 
-## 🔧 Installation
+1. Download the latest `.exe` release from the [Releases](https://github.com/EthanYixuanMi/ollama-quick-installer/releases) page.
+2. Double-click to launch and follow the 3-step interface.
+3. Enjoy Ollama with your selected models.
 
-1. Download the latest installer from the [Releases](https://github.com/EthanYixuanMi/ollama-windows-installer/releases) page.
-2. Run the `.exe` and follow the on-screen steps.
-3. You're ready to use `ollama` with your selected models!
+> 💡 You must install the official Ollama binary during Step 2 to use model pulling.
 
-## 💡 Screenshot
+---
 
-![screenshot](screenshot.png) <!-- You can replace this with your actual screenshot -->
+## 📷 Screenshots
 
-## 🔄 Versioning
+_Add screenshots here (e.g., welcome page, model download progress, etc.)_
 
-We publish versioned releases for every major update. See the [Releases](https://github.com/EthanYixuanMi/ollama-windows-installer/releases) section for changelogs and downloads.
+---
 
-## 🤝 Contributing
+## 🚀 Development
 
-Contributions are welcome! Feel free to fork this repo, submit pull requests, or open issues.
+### Prerequisites
+
+- Python 3.8+
+- `pip install -r requirements.txt`
+
+### Build (Windows .exe)
 
 ```bash
-git clone https://github.com/EthanYixuanMi/ollama-windows-installer.git
+pyinstaller --noconfirm --onefile --windowed main.py
