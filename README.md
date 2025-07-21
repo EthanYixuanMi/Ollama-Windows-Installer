@@ -45,7 +45,7 @@ This tool streamlines the whole process via a GUI and lets you:
 
 ## 📷 Screenshots
 
-_Add screenshots here (e.g., welcome page, model download progress, etc.)_
+<img width="442" height="233" alt="image" src="https://github.com/user-attachments/assets/518e50f4-b365-4d8e-82ee-30be43b6bbe6" />
 
 ---
 
