@@ -2,13 +2,13 @@ import sys
 import subprocess
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
-import subprocess
 import os
 import webbrowser
 import requests
 from bs4 import BeautifulSoup
 import threading
 import tkinter.scrolledtext as st
+import re
 
 env_var_name = "OLLAMA_MODELS"
 model_library_url = "https://ollama.com/library"
@@ -51,6 +51,10 @@ LANGUAGES = {
         "language_toggle": "Toggle Language"
     }
 }
+
+def strip_ansi_codes(text):
+    ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
+    return ansi_escape.sub('', text)
 
 class OllamaInstallerApp:
     def __init__(self, root):
@@ -210,7 +214,10 @@ class OllamaInstallerApp:
         if not self.path_entry.get():
             messagebox.showwarning(self.texts["title"], self.texts["warning_no_path"])
             return
-        selected = self.model_listbox.get(self.model_listbox.curselection())
+        selection = self.model_listbox.curselection()
+        if not selection:
+            return
+        selected = self.model_listbox.get(selection[0])
         if messagebox.askyesno(self.texts["title"], f"{self.texts['confirm_pull']} {selected}?"):
             self.pull_model(selected)
 
@@ -227,8 +234,8 @@ class OllamaInstallerApp:
                     stdout=subprocess.PIPE,
                     stderr=subprocess.STDOUT,
                     text=True,
-                    encoding="utf-8",  # 👈 关键修改
-                    errors="replace",  # 👈 防止乱码崩溃
+                    encoding="utf-8",
+                    errors="replace",
                     startupinfo=startupinfo
                 )
                 self.show_download_window(process, model_name)
@@ -280,11 +287,12 @@ class OllamaInstallerApp:
             for line in process.stdout:
                 if cancelled:
                     break
-                log_area.insert(tk.END, line)
+                clean_line = strip_ansi_codes(line)
+                log_area.insert(tk.END, clean_line)
                 log_area.see(tk.END)
 
                 for i, step in enumerate(steps):
-                    if step in line and step not in completed_steps:
+                    if step in clean_line and step not in completed_steps:
                         completed_steps.add(step)
                         percent = int((len(completed_steps)) / len(steps) * 100)
                         progress["value"] = percent
@@ -305,7 +313,6 @@ class OllamaInstallerApp:
             cancel_btn.config(state=tk.DISABLED)
 
         threading.Thread(target=read_output, daemon=True).start()
-
 
 if __name__ == "__main__":
     root = tk.Tk()
