@@ -59,4 +59,4 @@ _Add screenshots here (e.g., welcome page, model download progress, etc.)_
 ### Build (Windows .exe)
 
 ```bash
-pyinstaller --noconfirm --onefile --windowed main.py
+pyinstaller --noconfirm --onefile --windowed ollama_installer.py
