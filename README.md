@@ -1,5 +1,14 @@
 # Ollama Quick Installer for Windows
 
+[![Platform](https://img.shields.io/badge/Platform-Windows-blue.svg)](#)
+[![Python](https://img.shields.io/badge/Built%20with-Python%203.8+-yellow.svg)](#)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
+[![Author](https://img.shields.io/badge/Author-Yixuan%20Mi-blue.svg)](https://github.com/EthanYixuanMi)
+[![Release](https://img.shields.io/github/v/release/EthanYixuanMi/ollama-windows-installer?include_prereleases&label=Latest%20Release)](https://github.com/EthanYixuanMi/ollama-windows-installer/releases)
+[![Issues](https://img.shields.io/github/issues/EthanYixuanMi/ollama-windows-installer.svg)](https://github.com/EthanYixuanMi/ollama-windows-installer/issues)
+[![Stars](https://img.shields.io/github/stars/EthanYixuanMi/ollama-windows-installer.svg?style=social)](https://github.com/EthanYixuanMi/ollama-windows-installer/stargazers)
+
+
 A user-friendly graphical installer for [Ollama](https://ollama.com) on Windows.
 
 ---
