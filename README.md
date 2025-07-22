@@ -37,7 +37,7 @@ This tool streamlines the whole process via a GUI and lets you:
 
 ## 📦 Installation
 
-1. Download the latest `.exe` release from the [Releases](https://github.com/EthanYixuanMi/ollama-quick-installer/releases) page.  
+1. Download the latest `.exe` release from the [Releases](https://github.com/EthanYixuanMi/ollama-windows-installer/releases) page.  
 2. Double-click to launch and follow the 3-step interface.  
    - You may choose to install Ollama from the website or use the built-in `OllamaSetup.exe` installer.  
 3. After setup, select your model storage path and download models interactively.
