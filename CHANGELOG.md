@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [v1.1.0] - 2025-07-22
+
+### Added
+- 📦 Option to install Ollama from a local setup file (`OllamaSetup.exe`)
+- ➕ New button in Step 2 interface for installing legacy version
+- 🪟 Removed unnecessary terminal window using `--windowed` in PyInstaller
+
+### Improved
+- UI text localization for new install option (EN/中文)
+- README and build instructions updated
+
+### Fixed
+- No more terminal popup on `.exe` launch
+
+---
+
 ## [v1.0.0] - 2025-07-21
 
 ### Added
@@ -29,4 +45,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - One model download at a time (no queue support)
 
 ---
-
