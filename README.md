@@ -62,7 +62,7 @@ We plan to gradually enhance the installer with:
 - 📜 Log file export after download
 - 🛠 Better error handling & platform compatibility
 
-Feel free to suggest features via [Issues](https://github.com/EthanYixuanMi/ollama-quick-installer/issues) or contribute via PR!
+Feel free to suggest features via [Issues](https://github.com/EthanYixuanMi/ollama-windows-installer/issues) or contribute via PR!
 
 ---
 
