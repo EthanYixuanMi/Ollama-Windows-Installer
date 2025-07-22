@@ -8,7 +8,7 @@ A user-friendly graphical installer for [Ollama](https://ollama.com) on Windows.
 
 - 🪟 Intuitive 3-step GUI  
   1. Welcome (language selection)  
-  2. Ollama official installer download  
+  2. Ollama installer download (online or local version)  
   3. Model selection and download  
 - 🌐 Supports English / 简体中文 language toggle  
 - 📦 Real-time model list fetching from [ollama.com/library](https://ollama.com/library)  
@@ -16,6 +16,7 @@ A user-friendly graphical installer for [Ollama](https://ollama.com) on Windows.
 - 📊 Download progress bar and step tracking (pull → extract → verify)  
 - ❌ Cancel model download at any time  
 - ⚙️ Auto setup of the `OLLAMA_MODELS` environment variable  
+- 💽 Optional installer: bundled legacy version of `OllamaSetup.exe`
 
 ---
 
@@ -28,6 +29,7 @@ Installing Ollama on Windows typically requires:
 
 This tool streamlines the whole process via a GUI and lets you:
 - Choose language and model storage path
+- Install Ollama either from the official website or a local setup file
 - Pull models with one click
 - Monitor download status interactively
 
@@ -37,9 +39,10 @@ This tool streamlines the whole process via a GUI and lets you:
 
 1. Download the latest `.exe` release from the [Releases](https://github.com/EthanYixuanMi/ollama-quick-installer/releases) page.  
 2. Double-click to launch and follow the 3-step interface.  
-3. Enjoy Ollama with your selected models.
+   - You may choose to install Ollama from the website or use the built-in `OllamaSetup.exe` installer.  
+3. After setup, select your model storage path and download models interactively.
 
-> 💡 You must install the official Ollama binary during Step 2 to use model pulling.
+> 💡 Note: Internet access is required to fetch the model list or pull models.
 
 ---
 
@@ -54,9 +57,9 @@ This tool streamlines the whole process via a GUI and lets you:
 We plan to gradually enhance the installer with:
 
 - 🎨 Improved UI/UX (e.g. animations, styling, icons)
-- 🧩 Optional legacy version installer (OllamaSetup.exe)
-- 🔁 Model update check / version control
+- 🧩 Model update check / version control
 - 📁 Integrated offline model support
+- 📜 Log file export after download
 - 🛠 Better error handling & platform compatibility
 
 Feel free to suggest features via [Issues](https://github.com/EthanYixuanMi/ollama-quick-installer/issues) or contribute via PR!
@@ -73,4 +76,4 @@ Feel free to suggest features via [Issues](https://github.com/EthanYixuanMi/olla
 ### Build (Windows .exe)
 
 ```bash
-pyinstaller --noconfirm --onefile --windowed ollama_installer.py
+pyinstaller --noconfirm --onefile --windowed --add-data "OllamaSetup.exe;." ollama_installer.py
