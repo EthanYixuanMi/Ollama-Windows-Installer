@@ -68,8 +68,10 @@ This tool streamlines the whole process via a GUI and lets you:
 
 ## 📷 Screenshots
 
-<img width="442" height="277" alt="image" src="https://github.com/user-attachments/assets/f6b528a3-ed8a-45ed-a473-20bd4d6e2de7" />
-<img width="439" height="278" alt="image" src="https://github.com/user-attachments/assets/8e41db27-f18b-4f61-a116-110445e7eae6" />
+<img width="440" height="278" alt="image" src="https://github.com/user-attachments/assets/6c477810-17f0-4529-a121-03830b8941cc" />
+  
+<img width="446" height="277" alt="image" src="https://github.com/user-attachments/assets/c711a361-0eaf-4dae-8c31-c284615bd70d" />
+  
 <img width="440" height="299" alt="image" src="https://github.com/user-attachments/assets/45422b6e-0408-4588-bfd4-0f4a1653d5fd" />
 
 ---
