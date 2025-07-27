@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Download window includes a styled green progress bar with step-based progress updates
   - Real-time step tracking: manifest → layers → extract → verify → success
   - Completion message includes ✅ confirmation and success dialog
-- 📎 New button added: “📦 Install Local Version” (runs `OllamaSetup.exe` if present)
+
 
 ### Changed
 - 🪟 Increased main window size to `700x560` for better layout balance
