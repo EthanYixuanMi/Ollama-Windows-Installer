@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [v1.2.0] - 2025-07-27
+### Added
+- 🌐 **Extended multilingual support**: Added 16 new localized strings covering UI elements, error messages, and installation prompts
+- 🔤 **Featured models**: Added "deepseek-r1:1.5b" and "llama3.1:8b" as fixed-size models displayed at top of model list
+- 📍 **Improved model list logic**:
+  - Featured models always appear first in the list
+  - Fallback list includes featured models when network fetch fails
+
+### Changed
+- ♻️ **Code restructuring**:
+  - Modularized UI creation into separate methods
+  - Separated model download functionality from UI operations
+- 📝 **Enhanced error handling**:
+  - Unified error messages with multilingual support
+  - Added existence check for local installer EXE
+
+### Fixed
+- 🚫 **Progress bar completion**:
+  - Added "success" step to complete the final 20% of progress
+  - Fixed step counting algorithm (5 steps → 100%)
+- ✂️ **Terminal log sanitization**: Implemented ANSI escape code filtering for cleaner output
+
+---
+
 ## [v1.1.0] - 2025-07-22
 
 ### Added
