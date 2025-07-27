@@ -7,6 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [v2.0.0] - 2025-07-27
+
+### Added
+- 🎨 **Modern UI Overhaul**:
+  - Global font set to Segoe UI (English) / 思源黑体 (Simplified Chinese), with increased default size to 12pt
+  - Global DPI scaling increased to `tk scaling 2` for high-resolution displays
+  - Unified padding, layout alignment, and sv-ttk Fluent theme integration (optional)
+  - Status bar added at the bottom for path preview and updates
+- 🧭 **Improved step navigation**:
+  - Language selection now automatically advances to Step 2 (Ollama download)
+  - Language toggle button text fixed to "Switch to English" / "切换为中文"
+- 📥 **Enhanced model download UI**:
+  - Download window includes a styled green progress bar with step-based progress updates
+  - Real-time step tracking: manifest → layers → extract → verify → success
+  - Completion message includes ✅ confirmation and success dialog
+- 📎 New button added: “📦 Install Local Version” (runs `OllamaSetup.exe` if present)
+
+### Changed
+- 🪟 Increased main window size to `700x560` for better layout balance
+- 🌐 Language packs enriched: all errors, warnings, and download steps now support full bilingual messages
+- 🧰 Global font settings unified to avoid inconsistent widget appearance
+
+### Fixed
+- 🐞 Fixed issue where the installer remained on the welcome page after language selection
+- ❌ Properly disables cancel button and updates window state on download cancellation
+- 💬 Improved model list parsing: deduplicated and reordered entries for clarity
+
+---
+
 ## [v1.2.0] - 2025-07-27
 ### Added
 - 🌐 **Extended multilingual support**: Added 16 new localized strings covering UI elements, error messages, and installation prompts
